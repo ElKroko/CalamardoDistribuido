@@ -21,7 +21,7 @@ func EliminatePlayers(players []int, number) {
 	}
 }
 
-func RemoveElemArray(players []int, i int) []int {
+func RemovePlayer(players []int, i int) []int {
     players[i] = players[len(players)-1]
 	fmt.Printf("El jugador_%d fue eliminado\n",value)
 	//avisar jugador
@@ -29,17 +29,44 @@ func RemoveElemArray(players []int, i int) []int {
     return players[:len(players)-1]
 }
 
+func RemoveElemArray(array []int, i int) []int {
+    array[i] = array[len(array)-1]
+    return array[:len(array)-1]
+}
+
+func indexOf(element int, data []int) (int) {
+	for k, v := range data {
+		if element == v {
+			return k
+		}
+	}
+	return -1    //not found.
+ }
+
 func Juego2(players []int) {
 	rand.Seed(time.Now().UnixNano())
 	fmt.Println("Bienvenido al juego número 2")
 
-	// numberPlayers := (rand.Intn(8)+9)
+	team1 := []int{}
+	team2 := []int{}
 
-	// if (numberPlayers % 2) == 0 {
+	teamPlayers := players 
+	var newPlayer int
 
-	// } else {
-
-	// }
+	for len(teamPlayers) > 0 {
+		if len(teamPlayers) == 1 {
+			players = RemovePlayer(players, indexOf(teamplayers[0]))
+		} else {
+			//ingresar juegador a team 1
+			newPlayer = rand.Intn(len(teamPlayers))
+			team1 = append(teamPlayers[newPlayer])
+			teamPlayers = RemoveElemArray[newPlayer]
+			//ingresar juegador a team 2
+			newPlayer = rand.Intn(len(teamPlayers))
+			team2 = append(teamPlayers[newPlayer])
+			teamPlayers = RemoveElemArray[newPlayer]
+		}
+	}
 
 
 	fmt.Println("Elija un número del 1 al 4")
@@ -54,20 +81,20 @@ func Juego2(players []int) {
 		fmt.Println("Nadie muerio en otra ronda")
 	} else if bossParity == team1Parity && bossParity != team2Parity {
 		for number := range team2 {
-			players = RemoveElemArray(number)
+			players = RemovePlayer(number)
 		}
 	} else if bossParity != team1Parity && bossParity == team2Parity {
 		for number := range team1 {
-			players = RemoveElemArray(number)
+			players = RemovePlayer(number)
 		}
 	} else {
 		if rand.Intn(2) == 0 {
 			for number := range team1 {
-				players = RemoveElemArray(number)
+				players = RemovePlayer(number)
 			}
 		} else {
 			for number := range team2 {
-				players = RemoveElemArray(number)
+				players = RemovePlayer(number)
 			}
 		}
 	}
@@ -132,5 +159,7 @@ func main() {
 
 	fmt.Println("Los jugadores que ganaron los juegos del calamar son:")
 	ShowPlayers(players)
+
+	return
 }
 
