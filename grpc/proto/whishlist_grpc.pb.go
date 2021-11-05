@@ -11,6 +11,7 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
+// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // WishListServiceClient is the client API for WishListService service.
@@ -90,7 +91,7 @@ type UnsafeWishListServiceServer interface {
 }
 
 func RegisterWishListServiceServer(s grpc.ServiceRegistrar, srv WishListServiceServer) {
-	s.RegisterService(&_WishListService_serviceDesc, srv)
+	s.RegisterService(&WishListService_ServiceDesc, srv)
 }
 
 func _WishListService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -147,7 +148,10 @@ func _WishListService_List_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-var _WishListService_serviceDesc = grpc.ServiceDesc{
+// WishListService_ServiceDesc is the grpc.ServiceDesc for WishListService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var WishListService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "grpc.WishListService",
 	HandlerType: (*WishListServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
@@ -165,5 +169,5 @@ var _WishListService_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/wishlist.proto",
+	Metadata: "proto/whishlist.proto",
 }
