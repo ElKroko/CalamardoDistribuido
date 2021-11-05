@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package grpc;
+
+option go_package = "github.com/ElKroko/CalamardoDistribuido/tree/main/grpc/proto";
+
+// Service y messages del juego
+
+service CalamardoGame {
+    rpc SayHello(HelloRequest) returns (HelloReply) {}
+
+    rpc JoinGame(JoinRequest) returns (JoinReply) {}
+}
+
+
+message HelloRequest {
+    string name = 1;
+}
+
+message HelloReply {
+    string message = 1;
+}
+
+message JoinRequest {
+    string player = 1;
+    string message = 2;
+}
+
+message JoinReply {
+    string codes1 = 1;
+    string codes2 = 2;
+    string codes3 = 3;
+}

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "github.com/tomiok/grpc-test-wishlist/proto"
+	pb "github.com/ElKroko/CalamardoDistribuido/tree/main/grpc/proto"
 	"google.golang.org/grpc"
 	"math/rand"
 	"strconv"
@@ -22,17 +22,15 @@ func main() {
 		panic("cannot connect with server " + err.Error())
 	}
 
-	serviceClient := pb.NewWishListServiceClient(conn)
+	serviceClient := pb.NewCalamardoGameClient(conn)
 
-	res, err := serviceClient.Create(context.Background(), &pb.CreateWishListReq{
-		WishList: &pb.WishList{
-			Id:   generateID(),
-			Name: "my wishlist",
-		},
-	})
+	player := "Jugador 1"
+	message := "Hola, quiero entrar al juego"
+
+	res, err := serviceClient.JoinGame(context.Background(), &pb.JoinRequest{Player: player, Message: message})
 
 	if err != nil {
-		panic("wishlist is not created  " + err.Error())
+		panic("No se pudo anadir el jugador  " + err.Error())
 	}
 
 	fmt.Println(res.WishListId)

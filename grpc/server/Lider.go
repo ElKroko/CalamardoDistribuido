@@ -3,28 +3,37 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "github.com/tomiok/grpc-test-wishlist/proto"
-	"google.golang.org/grpc"
+	"log"
 	"net"
+
+	pb "github.com/ElKroko/CalamardoDistribuido/tree/main/grpc/proto"
+	"google.golang.org/grpc"
 )
 
 type server struct {
 	pb.UnimplementedWishListServiceServer
 }
 
-func (s *server) Create(ctx context.Context, req *pb.CreateWishListReq) (*pb.CreateWishListResp, error) {
-	fmt.Println("creating the wish list " + req.WishList.Name)
-	return &pb.CreateWishListResp{
-		WishListId: req.WishList.Id,
-	}, nil
+type PlayerStruct struct {
+	id	string
+	alive bool
+	score int
 }
 
-func (s *server) Add(context.Context, *pb.AddItemReq) (*pb.AddItemResp, error) {
-	return nil, nil
-}
+// Variables
+var totalPlayers int
+var players_online []PlayerStruct
 
-func (s *server) List(context.Context, *pb.ListWishListReq) (*pb.ListWishListResp, error) {
-	return nil, nil
+
+
+func (s *server) JoinGame (ctx context.Context, in *pb.JoinRequest) (*pb.JoinReply, error) {
+	log.Printf("Recibido: %s", in.GetMessage())
+	totalPlayers +=1
+	players_online = append(players_online, PlayerStruct{in.GetPlayer(), true, 0})
+
+	log.Printf("Jugador agregado")
+	// fmt.Printf("%v", players_online)
+	return &pb.JoinReply{Codes1: "1rv", Codes2: "2tc", Codes3: "3tn"}, nil
 }
 
 func main() {
@@ -33,9 +42,10 @@ func main() {
 	if err != nil {
 		panic("cannot create tcp connection " + err.Error())
 	}
+	
 
 	serv := grpc.NewServer()
-	pb.RegisterWishListServiceServer(serv, &server{})
+	pb.RegisterCalamardoGameServer(serv, &server{})
 	if err = serv.Serve(listner); err != nil {
 		panic("cannot initialize the server" + err.Error())
 	}
