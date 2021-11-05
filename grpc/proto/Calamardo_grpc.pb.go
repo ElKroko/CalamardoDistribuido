@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type CalamardoGameClient interface {
 	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 	JoinGame(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinReply, error)
+	StartGame(ctx context.Context, in *StartRequest, opts ...grpc.CallOption) (*StartReply, error)
 }
 
 type calamardoGameClient struct {
@@ -48,12 +49,22 @@ func (c *calamardoGameClient) JoinGame(ctx context.Context, in *JoinRequest, opt
 	return out, nil
 }
 
+func (c *calamardoGameClient) StartGame(ctx context.Context, in *StartRequest, opts ...grpc.CallOption) (*StartReply, error) {
+	out := new(StartReply)
+	err := c.cc.Invoke(ctx, "/proto.CalamardoGame/StartGame", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CalamardoGameServer is the server API for CalamardoGame service.
 // All implementations must embed UnimplementedCalamardoGameServer
 // for forward compatibility
 type CalamardoGameServer interface {
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
 	JoinGame(context.Context, *JoinRequest) (*JoinReply, error)
+	StartGame(context.Context, *StartRequest) (*StartReply, error)
 	mustEmbedUnimplementedCalamardoGameServer()
 }
 
@@ -66,6 +77,9 @@ func (UnimplementedCalamardoGameServer) SayHello(context.Context, *HelloRequest)
 }
 func (UnimplementedCalamardoGameServer) JoinGame(context.Context, *JoinRequest) (*JoinReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method JoinGame not implemented")
+}
+func (UnimplementedCalamardoGameServer) StartGame(context.Context, *StartRequest) (*StartReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StartGame not implemented")
 }
 func (UnimplementedCalamardoGameServer) mustEmbedUnimplementedCalamardoGameServer() {}
 
@@ -116,6 +130,24 @@ func _CalamardoGame_JoinGame_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CalamardoGame_StartGame_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CalamardoGameServer).StartGame(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/proto.CalamardoGame/StartGame",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CalamardoGameServer).StartGame(ctx, req.(*StartRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CalamardoGame_ServiceDesc is the grpc.ServiceDesc for CalamardoGame service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -130,6 +162,10 @@ var CalamardoGame_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "JoinGame",
 			Handler:    _CalamardoGame_JoinGame_Handler,
+		},
+		{
+			MethodName: "StartGame",
+			Handler:    _CalamardoGame_StartGame_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

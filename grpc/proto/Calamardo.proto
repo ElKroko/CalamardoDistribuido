@@ -10,6 +10,9 @@ service CalamardoGame {
     rpc SayHello(HelloRequest) returns (HelloReply) {}
 
     rpc JoinGame(JoinRequest) returns (JoinReply) {}
+
+    rpc StartGame (StartRequest) returns (StartReply) {}
+    
 }
 
 
@@ -30,4 +33,12 @@ message JoinReply {
     string stage1 = 1;
     string stage2 = 2;
     string stage3 = 3;
+}
+
+message StartRequest {
+    string message =1;
+}
+
+message StartReply {
+    bool started = 1;
 }
