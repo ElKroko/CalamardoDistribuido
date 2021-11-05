@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package grpc;
+package proto;
 
-option go_package = "github.com/ElKroko/CalamardoDistribuido/tree/main/grpc/proto";
+option go_package = "lab1/game/proto";
 
 // Service y messages del juego
 

@@ -32,7 +32,7 @@ func NewCalamardoGameClient(cc grpc.ClientConnInterface) CalamardoGameClient {
 
 func (c *calamardoGameClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {
 	out := new(HelloReply)
-	err := c.cc.Invoke(ctx, "/grpc.CalamardoGame/SayHello", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.CalamardoGame/SayHello", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func (c *calamardoGameClient) SayHello(ctx context.Context, in *HelloRequest, op
 
 func (c *calamardoGameClient) JoinGame(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinReply, error) {
 	out := new(JoinReply)
-	err := c.cc.Invoke(ctx, "/grpc.CalamardoGame/JoinGame", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/proto.CalamardoGame/JoinGame", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +90,7 @@ func _CalamardoGame_SayHello_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc.CalamardoGame/SayHello",
+		FullMethod: "/proto.CalamardoGame/SayHello",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CalamardoGameServer).SayHello(ctx, req.(*HelloRequest))
@@ -108,7 +108,7 @@ func _CalamardoGame_JoinGame_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc.CalamardoGame/JoinGame",
+		FullMethod: "/proto.CalamardoGame/JoinGame",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CalamardoGameServer).JoinGame(ctx, req.(*JoinRequest))
@@ -120,7 +120,7 @@ func _CalamardoGame_JoinGame_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CalamardoGame_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "grpc.CalamardoGame",
+	ServiceName: "proto.CalamardoGame",
 	HandlerType: (*CalamardoGameServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

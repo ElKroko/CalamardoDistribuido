@@ -1,4 +1,4 @@
-module github.com/tomiok/grpc-test-wishlist
+module lab1/game
 
 go 1.13
 

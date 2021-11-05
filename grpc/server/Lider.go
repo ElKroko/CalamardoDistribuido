@@ -6,7 +6,7 @@ import (
 	"log"
 	"net"
 
-	pb "github.com/ElKroko/CalamardoDistribuido/tree/main/grpc/proto"
+	pb "lab1/game/proto"
 	"google.golang.org/grpc"
 )
 
