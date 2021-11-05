@@ -31,7 +31,7 @@ func (s *server) JoinGame (ctx context.Context, in *pb.JoinRequest) (*pb.JoinRep
 	totalPlayers +=1
 	players_online = append(players_online, PlayerStruct{in.GetPlayer(), true, 0})
 
-	log.Printf("Jugador agregado")
+	log.Printf("Jugador %s agregado", in.GetPlayer())
 	fmt.Println("Hola")
 	// fmt.Printf("%v", players_online)
 	return &pb.JoinReply{Unido: "si"}, nil
