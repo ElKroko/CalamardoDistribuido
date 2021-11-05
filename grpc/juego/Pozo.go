@@ -5,7 +5,6 @@ import ("fmt"
 		"log"
         "bufio"
         "strings"
-        "github.com/streadway/amqp"
 )
 
 func ActualAmmount() string {

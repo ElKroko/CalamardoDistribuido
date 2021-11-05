@@ -3,8 +3,22 @@ package main
 import ("os"
 		"log"
         "strconv"
-        "github.com/streadway/amqp"
 )
+
+func SendPlays(round int, player int) int[]{
+    plays := []int{}
+    f, err := os.Open("jugador_" + strconv.Itoa(player) + "__ronda_" + strconv.Itoa(round) + ".txt")
+    var splitText string
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer f.Close()
+    scanner := bufio.NewScanner(f)
+    for scanner.Scan() {
+		plays = append(strconv.Itoa(scanner.Text()))
+    }
+    return plays
+}
 
 func main() {
     next := false

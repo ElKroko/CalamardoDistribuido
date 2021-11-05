@@ -7,6 +7,21 @@ import ("math/rand"
 		"os"
 )
 
+// func SearchPlayerPlays(player int) int[] {
+// 	f, err := os.Open("lugarJugador.txt")
+//     var splitText string
+//     if err != nil {
+//         log.Fatal(err)
+//     }
+//     defer f.Close()
+//     scanner := bufio.NewScanner(f)
+//     for scanner.Scan() {
+// 		splitText = strings.Split(scanner.Text(), " ")
+// 		if splitText[0] == "Jugador_" + player {
+//         	llamarDataNode(splitText[0][-1], splitText[1][-1], splitText[2])
+// 		}
+//     }
+// }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
