@@ -33,6 +33,6 @@ func main() {
 		panic("No se pudo anadir el jugador  " + err.Error())
 	}
 
-	fmt.Println(res.message)
+	fmt.Println(res.unido)
 
 }

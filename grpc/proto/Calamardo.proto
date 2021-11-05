@@ -27,7 +27,5 @@ message JoinRequest {
 }
 
 message JoinReply {
-    string codes1 = 1;
-    string codes2 = 2;
-    string codes3 = 3;
+    string unido = 1;
 }

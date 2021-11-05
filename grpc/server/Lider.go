@@ -34,7 +34,7 @@ func (s *server) JoinGame (ctx context.Context, in *pb.JoinRequest) (*pb.JoinRep
 	log.Printf("Jugador agregado")
 	fmt.Println("Hola")
 	// fmt.Printf("%v", players_online)
-	return &pb.JoinReply{Codes1: "1rv", Codes2: "2tc", Codes3: "3tn"}, nil
+	return &pb.JoinReply{Unido: "si"}, nil
 }
 
 func main() {
