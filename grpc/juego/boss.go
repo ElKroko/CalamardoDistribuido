@@ -3,6 +3,7 @@ package main
 import ("fmt"
 		"math/rand"
 		"time"
+		"math"
 )
 
 func ShowPlayers(players []int) {
@@ -42,6 +43,35 @@ func indexOf(element int, data []int) (int) {
 	}
 	return -1    //not found.
  }
+
+func Juego3(players []int) {
+	rand.Seed(time.Now().UnixNano())
+	fmt.Println("Bienvenido al juego número 2")
+	if len(players)%2 == 1 {
+		players = RemovePlayer(rand.Intn(len(players)))
+	}
+
+	gamePlayers := player
+	var player1 int
+	var player2 int
+	var play1 int
+	var play2 int
+	for i := 0; i < len(players)/2; i++ {
+		player1 = rand.Intn(len(gamePlayers))
+		player2 = rand.Intn(len(gamePlayers))
+		play1 = (rand.Intn(10)+1)
+		play2 = (rand.Intn(10)+1)
+		if math.Abs(playBoss - play1) > math.Abs(playBoss - play2) {
+			players = RemovePlayer(players, indexOf(player1))
+		} else if math.Abs(playBoss - play1) < math.Abs(playBoss - play2) {
+			players = RemovePlayer(players, indexOf(player1))
+		}
+		gamePlayers = RemoveElemArray(indexOf(player1))
+		gamePlayers = RemoveElemArray(indexOf(player2))
+
+	}
+	return players
+}
 
 func Juego2(players []int) {
 	rand.Seed(time.Now().UnixNano())
@@ -150,6 +180,7 @@ func juego_1(jugador bool, ronda int) int {
 	return gano
 
 }
+
 func main() {
 	players := []int{1, 2, 3,4,5,6,7,8,9,10,11,12,13,14,15,16}
 	var option int

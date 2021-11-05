@@ -60,13 +60,20 @@ func juego_1(jugador bool, ronda int) int {
 }
 
 func juego2_jugador() int {
-	// hacer cosas
+	fmt.Println("Hola!")
+	fmt.Println("Elija un numero del 1 al 4")
+	fmt.Print("-> ")
+	fmt.Scanln(&numero)
+	fmt.Println(resultado)
 	return 1
 }
 
 func juego3_jugador() int {
-	// hacer cosas
-
+	fmt.Println("Hola!")
+	fmt.Println("Elija un numero del 1 al 10")
+	fmt.Print("-> ")
+	fmt.Scanln(&numero)
+	fmt.Println(resultado)
 	return 1
 }
 
