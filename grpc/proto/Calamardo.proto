@@ -27,5 +27,7 @@ message JoinRequest {
 }
 
 message JoinReply {
-    string unido = 1;
+    string stage1 = 1;
+    string stage2 = 2;
+    string stage3 = 3;
 }

@@ -33,9 +33,13 @@ func (s *server) JoinGame (ctx context.Context, in *pb.JoinRequest) (*pb.JoinRep
 
 	log.Printf("Jugador %s agregado", in.GetPlayer())
 	fmt.Println("Hola")
-	// fmt.Printf("%v", players_online)
-	return &pb.JoinReply{Unido: "si"}, nil
+	return &pb.JoinReply{Stage1: "1", Stage2: "2", Stage3: "3"}, nil
 }
+
+
+
+
+
 
 func main() {
 	listner, err := net.Listen("tcp", ":8080")
