@@ -6,7 +6,7 @@ import (
 	"log"
 	"net"
 
-	pb "lab1/game/proto"
+	pb "lab/game/proto"
 	"google.golang.org/grpc"
 )
 

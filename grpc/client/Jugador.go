@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	pb "github.com/ElKroko/CalamardoDistribuido/tree/main/grpc/proto"
+	pb "lab/game/proto"
 	"google.golang.org/grpc"
 	"math/rand"
 	"strconv"
@@ -33,6 +33,6 @@ func main() {
 		panic("No se pudo anadir el jugador  " + err.Error())
 	}
 
-	fmt.Println(res.WishListId)
+	fmt.Println(res.message)
 
 }

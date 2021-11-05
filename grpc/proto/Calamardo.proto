@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package proto;
 
-option go_package = "lab1/game/proto";
+option go_package = "lab/game/proto";
 
 // Service y messages del juego
 
