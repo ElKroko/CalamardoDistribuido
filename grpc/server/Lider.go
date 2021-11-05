@@ -11,7 +11,7 @@ import (
 )
 
 type server struct {
-	pb.UnimplementedWishListServiceServer
+	pb.UnimplementedCalamardoGameServer
 }
 
 type PlayerStruct struct {
