@@ -28,10 +28,10 @@ func (s *server) List(context.Context, *pb.ListWishListReq) (*pb.ListWishListRes
 }
 
 func main() {
-	listner, err := net.Listen("tcp", "10.6.43.109:8080")
+	listner, err := net.Listen("tcp", ":8080")
 
 	if err != nil {
-		panic("cannot create tcp connection" + err.Error())
+		panic("cannot create tcp connection " + err.Error())
 	}
 
 	serv := grpc.NewServer()
