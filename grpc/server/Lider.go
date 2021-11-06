@@ -68,9 +68,9 @@ func (s *server) JuegoMsg(ctx context.Context, in *pb.JuegoRequest) (*pb.JuegoRe
 	if etapaActual == 1 && etapa_jugador == 1{
 		ronda := in.GetRound()
 		id_jugador := in.GetId()
-		log.Printf("El Jugador ", id_jugador, "en la ronda ", ronda )
+		log.Printf("El Jugador ", id_jugador, "en la ronda ", ronda)
 		playPlayer := in.GetJugada()
-		log.Printf("Ha jugado la carta",playPlayer)
+		log.Printf("Ha jugado la carta", playPlayer)
 
 		suma := in.GetScore()
 
@@ -183,6 +183,10 @@ func main() {
 		fmt.Println(players_online[i].id)
 	}
 
+	// Iniciar juego 1
+	juego_1()
+
+	
 
 
 
