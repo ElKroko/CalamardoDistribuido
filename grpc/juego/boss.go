@@ -6,6 +6,12 @@ import ("fmt"
 		"math"
 )
 
+type PlayerStruct struct {
+	id	string
+	alive bool
+	score int
+}
+
 func ShowPlayers(players []int) {
 	for _, value := range players {
 		fmt.Printf("jugador_%d\n",value)
@@ -132,50 +138,48 @@ func Juego2(players []int) {
 
 }
 
-func juego_1(jugador bool, ronda int) int {
+func juego_1(players []PlayerStruct) []PlayerStruct {
 	fmt.Println("Hola!")
 	rand.Seed(time.Now().UnixNano())
 
 	suma := 0
 	var numero int
 	gano := 0
+	ronda := 0
+
+	playsBoss := []int{0, 0, 0, 0}
 
 	for ronda < 4 {
-
-		// Seleccionar numero para jugar
-		if jugador {
-			fmt.Println("Elija un numero del 1 al 10")
-			fmt.Print("-> ")
-			fmt.Scanln(&numero)
-
-		} else {
-			numero = rand.Intn(10)
-
-		}
-
-		// Chequear si el numero es igual o mayor al del lider
-
-		muere := false
-
-		// Fin
-
-		if !muere {
-			suma += numero
-			fmt.Println("La suma da: ", suma)
-		} else {
-			gano = 0
-			break
-		}
-
-		// sumar al numero anterior
-		if suma >= 21 {
-			gano = 1
-			break
-		}
-
-		fmt.Println(numero)
+		fmt.Println("Elija un numero del 6 al 10")
+		fmt.Print("-> ")
+		fmt.Scanln(&numero)
+		playBoss[ronda] = numero
 		ronda = ronda + 1
 	}
+
+	for i := 0; i < 16; i++ {
+		ronda = 0
+		suma = 0
+		for ronda < 4 {
+			playPlayer = 7//recibe shieee
+			if playPlayer >= playBoss[ronda] {
+				players = RemovePlayer(players)
+				ronda = 4
+			} else {
+				suma = suma + playPlayer
+				if suma >= 21 {
+					ronda = 4
+				} else if ronda == 3 {
+					players = RemovePlayer(players)
+				} else {
+					ronda = ronda + 1
+				}
+			}
+		}
+		return playes
+	}
+
+	
 
 	return gano
 
