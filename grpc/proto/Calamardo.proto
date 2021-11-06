@@ -12,6 +12,8 @@ service CalamardoGame {
     rpc JoinGame(JoinRequest) returns (JoinReply) {}
 
     rpc StartGame (StartRequest) returns (StartReply) {}
+
+    rpc Juego1msg (Juego1Request) returns (Juego1Reply) {}
     
 }
 
@@ -41,4 +43,12 @@ message StartRequest {
 
 message StartReply {
     bool started = 1;
+}
+
+message Juego1Request {
+    string jugada = 1;
+}
+
+message Juego1Reply {
+    bool muere = 1;
 }
