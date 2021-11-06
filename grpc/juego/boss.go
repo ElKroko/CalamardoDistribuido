@@ -28,7 +28,8 @@ func EliminatePlayers(players []int, number) {
 	}
 }
 
-func RemovePlayer(players []int, i int) []int {
+func RemovePlayer(players []PlayerStruct, i int) []PlayerStruct {
+	value := player[i].id 
     players[i] = players[len(players)-1]
 	fmt.Printf("El jugador_%d fue eliminado\n",value)
 	//avisar jugador
@@ -36,21 +37,21 @@ func RemovePlayer(players []int, i int) []int {
     return players[:len(players)-1]
 }
 
-func RemoveElemArray(array []int, i int) []int {
+func RemoveElemArray(array []PlayerStruct, i int) []int {
     array[i] = array[len(array)-1]
     return array[:len(array)-1]
 }
 
-func indexOf(element int, data []int) (int) {
+func indexOf(element int, data []PlayerStruct) (int) {
 	for k, v := range data {
-		if element == v {
+		if element == v.id {
 			return k
 		}
 	}
 	return -1    //not found.
  }
 
-func Juego3(players []int) {
+func Juego3() {
 	rand.Seed(time.Now().UnixNano())
 	fmt.Println("Bienvenido al juego número 2")
 	if len(players)%2 == 1 {
@@ -72,14 +73,14 @@ func Juego3(players []int) {
 		} else if math.Abs(playBoss - play1) < math.Abs(playBoss - play2) {
 			players = RemovePlayer(players, indexOf(player1))
 		}
-		gamePlayers = RemoveElemArray(indexOf(player1))
-		gamePlayers = RemoveElemArray(indexOf(player2))
+		gamePlayers = RemoveElemArray(gamePlayers, indexOf(player1))
+		gamePlayers = RemoveElemArray(gamePlayers, indexOf(player2))
 
 	}
-	return players
+	return 
 }
 
-func Juego2(players []int) {
+func Juego2() {
 	rand.Seed(time.Now().UnixNano())
 	fmt.Println("Bienvenido al juego número 2")
 
@@ -96,14 +97,13 @@ func Juego2(players []int) {
 			//ingresar juegador a team 1
 			newPlayer = rand.Intn(len(teamPlayers))
 			team1 = append(teamPlayers[newPlayer])
-			teamPlayers = RemoveElemArray[newPlayer]
+			teamPlayers = RemoveElemArray(teamPlayers, newPlayer)
 			//ingresar juegador a team 2
 			newPlayer = rand.Intn(len(teamPlayers))
 			team2 = append(teamPlayers[newPlayer])
-			teamPlayers = RemoveElemArray[newPlayer]
+			teamPlayers = RemoveElemArray(teamPlayers, newPlayer)
 		}
 	}
-
 
 	fmt.Println("Elija un número del 1 al 4")
 	var bossNumber int
@@ -134,11 +134,11 @@ func Juego2(players []int) {
 			}
 		}
 	}
-	return players
+	return
 
 }
 
-func juego_1(players []PlayerStruct) []PlayerStruct {
+func juego_1() {
 	fmt.Println("Hola!")
 	rand.Seed(time.Now().UnixNano())
 
@@ -163,20 +163,20 @@ func juego_1(players []PlayerStruct) []PlayerStruct {
 		for ronda < 4 {
 			playPlayer = 7//recibe shieee
 			if playPlayer >= playBoss[ronda] {
-				players = RemovePlayer(players)
+				players = RemovePlayer(players, indexOf(i))
 				ronda = 4
 			} else {
 				suma = suma + playPlayer
 				if suma >= 21 {
 					ronda = 4
 				} else if ronda == 3 {
-					players = RemovePlayer(players)
+					players = RemovePlayer(players, indexOf(i))
 				} else {
 					ronda = ronda + 1
 				}
 			}
 		}
-		return playes
+		return
 	}
 
 	
