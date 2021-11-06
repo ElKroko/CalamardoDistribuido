@@ -21,7 +21,7 @@ type CalamardoGameClient interface {
 	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
 	JoinGame(ctx context.Context, in *JoinRequest, opts ...grpc.CallOption) (*JoinReply, error)
 	StartGame(ctx context.Context, in *StartRequest, opts ...grpc.CallOption) (*StartReply, error)
-	Juego1Msg(ctx context.Context, in *Juego1Request, opts ...grpc.CallOption) (*Juego1Reply, error)
+	JuegoMsg(ctx context.Context, in *JuegoRequest, opts ...grpc.CallOption) (*JuegoReply, error)
 }
 
 type calamardoGameClient struct {
@@ -59,9 +59,9 @@ func (c *calamardoGameClient) StartGame(ctx context.Context, in *StartRequest, o
 	return out, nil
 }
 
-func (c *calamardoGameClient) Juego1Msg(ctx context.Context, in *Juego1Request, opts ...grpc.CallOption) (*Juego1Reply, error) {
-	out := new(Juego1Reply)
-	err := c.cc.Invoke(ctx, "/proto.CalamardoGame/Juego1msg", in, out, opts...)
+func (c *calamardoGameClient) JuegoMsg(ctx context.Context, in *JuegoRequest, opts ...grpc.CallOption) (*JuegoReply, error) {
+	out := new(JuegoReply)
+	err := c.cc.Invoke(ctx, "/proto.CalamardoGame/JuegoMsg", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ type CalamardoGameServer interface {
 	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
 	JoinGame(context.Context, *JoinRequest) (*JoinReply, error)
 	StartGame(context.Context, *StartRequest) (*StartReply, error)
-	Juego1Msg(context.Context, *Juego1Request) (*Juego1Reply, error)
+	JuegoMsg(context.Context, *JuegoRequest) (*JuegoReply, error)
 	mustEmbedUnimplementedCalamardoGameServer()
 }
 
@@ -92,8 +92,8 @@ func (UnimplementedCalamardoGameServer) JoinGame(context.Context, *JoinRequest) 
 func (UnimplementedCalamardoGameServer) StartGame(context.Context, *StartRequest) (*StartReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartGame not implemented")
 }
-func (UnimplementedCalamardoGameServer) Juego1Msg(context.Context, *Juego1Request) (*Juego1Reply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Juego1Msg not implemented")
+func (UnimplementedCalamardoGameServer) JuegoMsg(context.Context, *JuegoRequest) (*JuegoReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JuegoMsg not implemented")
 }
 func (UnimplementedCalamardoGameServer) mustEmbedUnimplementedCalamardoGameServer() {}
 
@@ -162,20 +162,20 @@ func _CalamardoGame_StartGame_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CalamardoGame_Juego1Msg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Juego1Request)
+func _CalamardoGame_JuegoMsg_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(JuegoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CalamardoGameServer).Juego1Msg(ctx, in)
+		return srv.(CalamardoGameServer).JuegoMsg(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.CalamardoGame/Juego1msg",
+		FullMethod: "/proto.CalamardoGame/JuegoMsg",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CalamardoGameServer).Juego1Msg(ctx, req.(*Juego1Request))
+		return srv.(CalamardoGameServer).JuegoMsg(ctx, req.(*JuegoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -200,8 +200,8 @@ var CalamardoGame_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _CalamardoGame_StartGame_Handler,
 		},
 		{
-			MethodName: "Juego1msg",
-			Handler:    _CalamardoGame_Juego1Msg_Handler,
+			MethodName: "JuegoMsg",
+			Handler:    _CalamardoGame_JuegoMsg_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

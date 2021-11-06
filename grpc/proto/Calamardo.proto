@@ -13,7 +13,7 @@ service CalamardoGame {
 
     rpc StartGame (StartRequest) returns (StartReply) {}
 
-    rpc Juego1msg (Juego1Request) returns (Juego1Reply) {}
+    rpc JuegoMsg (JuegoRequest) returns (JuegoReply) {}
     
 }
 
@@ -27,14 +27,13 @@ message HelloReply {
 }
 
 message JoinRequest {
-    string player = 1;
-    string message = 2;
+    string message = 1;
 }
 
 message JoinReply {
-    string stage1 = 1;
-    string stage2 = 2;
-    string stage3 = 3;
+    int32 id_jugador = 1;
+    bool alive = 2;
+    int32 round = 3;
 }
 
 message StartRequest {
@@ -45,10 +44,17 @@ message StartReply {
     bool started = 1;
 }
 
-message Juego1Request {
-    string jugada = 1;
+message JuegoRequest {
+    int32 id = 1;
+    int32 jugada = 2;
+    int32 round = 3;
+    int32 score = 4;
+    int32 etapa = 5;
 }
 
-message Juego1Reply {
-    bool muere = 1;
+message JuegoReply {
+    bool alive = 1;
+    int32 round = 2;
+    int32 score = 3;
+    int32 etapa = 4;
 }

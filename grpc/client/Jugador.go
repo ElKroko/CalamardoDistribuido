@@ -8,23 +8,25 @@ import (
 	"math/rand"
 	"time"
 	"google.golang.org/grpc"
+	"strconv"
 )
 
 type PlayerStruct struct {
-	id    string
+	id    int32
 	alive bool
 	round int32
 	score int32
+	etapa int32
 }
 
 func Juego1(jugador bool, player PlayerStruct) int {
 	fmt.Println("Hola!")
 	rand.Seed(time.Now().UnixNano())
 
-	suma := 0
+	suma := player.score
 	var numero int
 	gano := 0
-	ronda := 0
+	ronda := player.round
 
 	for ronda < 4 {
 
@@ -41,7 +43,11 @@ func Juego1(jugador bool, player PlayerStruct) int {
 
 		// Chequear si el numero es igual o mayor al del lider
 
+		res, err := serviceClient.StartGame(context.Background(), &pb.StartRequest{Message: "Puedo jugar?"})
 
+		if err != nil {
+			panic("No pudimos chequear si esta inciado  " + err.Error())
+		}
 
 		muere := false
 
@@ -82,10 +88,6 @@ func main() {
 
 
 	// Definicion de Variables
-	//actualStage := "none"
-	stage1 := "none"
-	stage2 := "none"
-	stage3 := "none"
 
 	iniciado := false
 
@@ -100,25 +102,23 @@ func main() {
 
 	// Inscripcion del jugador
 
-	player := "Jugador 1"
 	message := "Hola, soy jugador"
 
-	res, err := serviceClient.JoinGame(context.Background(), &pb.JoinRequest{Player: player, Message: message})
+	res, err := serviceClient.JoinGame(context.Background(), &pb.JoinRequest{Message: message})
 
 	if err != nil {
 		panic("No se pudo anadir el jugador  " + err.Error())
 	}
 
-
-	stage1 = res.GetStage1()
-	stage2 = res.GetStage2()
-	stage3 = res.GetStage3()
+	jugador_struct := PlayerStruct{res.GetIdJugador(), res.GetAlive(), res.GetRound(), 0, 0}
 
 	iniciado = true
 
-	log.Printf(stage1)
-	log.Printf(stage2)
-	log.Printf(stage3)
+	log.Printf("")
+	log.Printf(strconv.Itoa(int(jugador_struct.id)))
+	log.Printf(strconv.FormatBool(jugador_struct.alive))
+	log.Printf(strconv.Itoa(int(jugador_struct.round)))
+	log.Printf(strconv.Itoa(int(jugador_struct.score)))
 
 
 
@@ -151,6 +151,11 @@ func main() {
 	}
 	
 	// comienza juego 1
+
+	// Se calcula el numero a mandar
+	// Se manda el numero, y se espera respuesta
+
+	
 
 
 }

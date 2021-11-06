@@ -147,13 +147,13 @@ func juego_1() {
 	gano := 0
 	ronda := 0
 
-	playsBoss := []int{0, 0, 0, 0}
+	var playsBoss []int
 
 	for ronda < 4 {
 		fmt.Println("Elija un numero del 6 al 10")
 		fmt.Print("-> ")
 		fmt.Scanln(&numero)
-		playBoss[ronda] = numero
+		append(playsBoss, numero )
 		ronda = ronda + 1
 	}
 
