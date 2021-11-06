@@ -1,6 +1,6 @@
 lider:
 	echo "Ejecutando lider"
-	go run repo/SquidGame/main.go
+	go run server/Lider.go
 
 namenode:
 	echo "Ejecutando namenode"
@@ -16,5 +16,4 @@ datanode:
 	
 jugador:
 	echo "Ejecutando jugadores"
-	go run SquidGame/client/jugador.go
-
+	go run client/Jugador.go

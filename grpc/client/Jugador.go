@@ -149,5 +149,8 @@ func main() {
 			fmt.Scanln(&continuar)
 		}
 	}
-		
+	
+	// comienza juego 1
+
+
 }

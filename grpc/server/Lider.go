@@ -6,9 +6,7 @@ import (
 	"log"
 	"net"
 	"time"
-
 	pb "lab/game/proto"
-
 	"google.golang.org/grpc"
 )
 
@@ -72,7 +70,7 @@ func main() {
 
 	started = false
 	totalPlayers = 0
-	//Calamardo := ""
+	// Calamardo := ""
 	// var muere bool
 
 	var empezar string
