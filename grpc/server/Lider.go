@@ -297,8 +297,8 @@ func main() {
 		// Cambiar team_players = players_online
 	for len(teamPlayers) > 0 {
 		if len(teamPlayers) == 1 {
-			teamPlayers = RemoveElemArray(teamPlayers, indexOfPlayers(teamPlayers[0].id))
 			RemovePlayer(indexOfPlayers(teamPlayers[0].id))
+			teamPlayers = RemoveElemArray(teamPlayers, indexOfPlayers(teamPlayers[0].id))
 			fmt.Println("Eliminamos, habia solo 1 jugador")
 		} else {
 			//ingresar juegador a team 1
@@ -391,9 +391,9 @@ func main() {
 	var play1 int
 	var play2 int
 	for i := 0; i < len(players_online)/2; i++ {
-		player1 = int32(rand.Intn(len(gamePlayers)))
+		player1 = gamePlayers[rand.Intn(len(gamePlayers))].id
 		gamePlayers = RemoveElemArray(gamePlayers, indexOf(gamePlayers, player1))
-		player2 = int32(rand.Intn(len(gamePlayers)))
+		player2 = gamePlayers[rand.Intn(len(gamePlayers))].id
 		gamePlayers = RemoveElemArray(gamePlayers, indexOf(gamePlayers, player2))
 		play1 = int(players_online[indexOfPlayers(player1)].jugada)
 		play2 = int(players_online[indexOfPlayers(player2)].jugada)
