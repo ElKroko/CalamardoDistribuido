@@ -2,7 +2,6 @@ package main
 
 import (
   "log"
-  "fmt"
   amqp "github.com/streadway/amqp"
 )
 
@@ -16,15 +15,15 @@ func main() {
 
 	conn, err := amqp.Dial("amqp://test:test@10.6.43.110:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
-	fmt.Println(ActualAmmount())("¿?")
+	log.Printf("¿?")
 	defer conn.Close()
 
-	fmt.Println(ActualAmmount())("Conecto")
+	log.Printf("Conecto")
 
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
-	fmt.Println(ActualAmmount())("Conecto channel")
+	log.Printf("Conecto channel")
 
 	q, err := ch.QueueDeclare(
 		"hello", // name
@@ -35,7 +34,7 @@ func main() {
 		nil,     // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-	fmt.Println(ActualAmmount())("Declaro Qeue")
+	log.Printf("Declaro Qeue")
 
 	i := "1"
 	s := "2"
@@ -52,5 +51,5 @@ func main() {
 			Body:        []byte(body),
 		})
 	failOnError(err, "Failed to publish a message")
-	fmt.Println(ActualAmmount())("Ha muerto: %s ", body)
+	log.Printf("Ha muerto: %s ", body)
 }
