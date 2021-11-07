@@ -17,9 +17,12 @@ func main() {
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
 
+	log.Printf("Conecto")
+
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
+	log.Printf("Conecto channel")
 
 	q, err := ch.QueueDeclare(
 		"hello", // name
@@ -30,6 +33,7 @@ func main() {
 		nil,     // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
+	log.Printf("Declaro Qeue")
 
 	i := "1"
 	s := "2"
