@@ -52,30 +52,30 @@ func indexOf(element int, data []PlayerStruct) (int) {
  }
 
 func Juego3() {
+	//PEDIRLES a todos una jugada3
 	rand.Seed(time.Now().UnixNano())
-	fmt.Println("Bienvenido al juego número 2")
-	if len(players)%2 == 1 {
-		players = RemovePlayer(rand.Intn(len(players)))
+	fmt.Println("Bienvenido al juego número 3")
+	if len(players_online)%2 == 1 {
+		RemovePlayer(rand.Intn(len(players_online)))
 	}
 
-	gamePlayers := player
+	gamePlayers := players_online
 	var player1 int
 	var player2 int
 	var play1 int
 	var play2 int
-	for i := 0; i < len(players)/2; i++ {
+	for i := 0; i < len(players_online)/2; i++ {
 		player1 = rand.Intn(len(gamePlayers))
-		player2 = rand.Intn(len(gamePlayers))
-		play1 = (rand.Intn(10)+1)
-		play2 = (rand.Intn(10)+1)
-		if math.Abs(playBoss - play1) > math.Abs(playBoss - play2) {
-			players = RemovePlayer(players, indexOf(player1))
-		} else if math.Abs(playBoss - play1) < math.Abs(playBoss - play2) {
-			players = RemovePlayer(players, indexOf(player1))
-		}
 		gamePlayers = RemoveElemArray(gamePlayers, indexOf(player1))
+		player2 = rand.Intn(len(gamePlayers))
 		gamePlayers = RemoveElemArray(gamePlayers, indexOf(player2))
-
+		play1 = players_online[indexOf(player1).jugada3]
+		play2 = players_online[indexOf(player2).jugada3]
+		if math.Abs(playBoss - play1) > math.Abs(playBoss - play2) {
+			RemovePlayer(indexOf(player1))
+		} else if math.Abs(playBoss - play1) < math.Abs(playBoss - play2) {
+			RemovePlayer(indexOf(player1))
+		}
 	}
 	return 
 }
@@ -90,13 +90,14 @@ func Juego2() {
 	teamPlayers := players 
 	var newPlayer int
 
+		// Cambiar team_players = players_online
 	for len(teamPlayers) > 0 {
 		if len(teamPlayers) == 1 {
 			players = RemovePlayer(players, indexOf(teamplayers[0]))
 		} else {
 			//ingresar juegador a team 1
-			newPlayer = rand.Intn(len(teamPlayers))
-			team1 = append(teamPlayers[newPlayer])
+			newPlayer = rand.Intn(len(teamPlayers))				// al azar entre todos los players online
+			team1 = append(teamPlayers[newPlayer])				// 
 			teamPlayers = RemoveElemArray(teamPlayers, newPlayer)
 			//ingresar juegador a team 2
 			newPlayer = rand.Intn(len(teamPlayers))
@@ -110,8 +111,15 @@ func Juego2() {
     fmt.Scanln(&bossNumber)
 
 	bossParity := bossNumber % 2
+	// Preguntar los numeros a los players y hacer la suma total de cada lista
+	// Enviar un ping (listo = false) 
+	// cuando todos los jugadores me hayan enviado su jugada, calcular que pasa con la paridad
+
+
 	team1Parity := (rand.Intn(4)+1) % 2
 	team2Parity := (rand.Intn(4)+1) % 2
+
+	// liberar el ping. (listo = true) y actualizar alive (decidiendo si murio o no, para cerrar procesos)
 
 	if bossParity == team1Parity && bossParity == team2Parity {
 		fmt.Println("Nadie muerio en otra ronda")

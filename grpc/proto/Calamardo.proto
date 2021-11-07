@@ -37,7 +37,9 @@ message JoinReply {
 }
 
 message StartRequest {
-    string message =1;
+    int32 id = 1;
+    string message = 2;
+    int32 etapa = 3;
 }
 
 message StartReply {
