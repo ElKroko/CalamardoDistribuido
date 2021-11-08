@@ -81,7 +81,7 @@ func main() {
 	flag1 := true
 
 	for flag1 {
-		fmt.Println("Tamos aqui")
+
 
 		res1, err := serviceClient.StartGame(context.Background(), &pb.StartRequest{Id: jugador_struct.id, Message: "Puedo jugar?", Etapa: jugador_struct.etapa})
 		if err != nil {
@@ -125,8 +125,17 @@ func main() {
 		}
 	}
 
+	// ==============================================================================
+	// 									Inicio Juego 1
+	// ==============================================================================
+
+
 	jugador_struct.etapa = 1
 
+	fmt.Println("--------------------------------")
+	fmt.Println("       Inicio del juego 1       ")
+	fmt.Println("--------------------------------")
+	fmt.Println("")
 
 	for ronda < 4 && jugador_struct.etapa == 1 {
 		// Seleccionar numero para jugar
@@ -183,16 +192,17 @@ func main() {
 	if !jugador_struct.alive {
 		log.Fatalln("Oh no! te han matado al final del juego 1")
 	}
-	if jugador_struct.etapa == 2{
-		fmt.Println("")
-		log.Println("Pasaste a la siguiente etapa!")
-	}
 	
-	// InicioJuego 2
+	// ==============================================================================
+	// 									Inicio Juego 2
+	// ==============================================================================
+
 	jugador_struct.etapa = 2
 	fmt.Println("")
+	fmt.Println("--------------------------------")
+	fmt.Println("       Inicio del juego 2       ")
+	fmt.Println("--------------------------------")
 	fmt.Println("")
-	fmt.Println("Iniciamos el Juego 2")
 
 
 	// Esperamos que el juego 2 este listo
@@ -266,8 +276,29 @@ func main() {
 
 	// Revisar si estoy vivo!
 	
+	resMuerte, err := serviceClient.Muerte(context.Background(), &pb.MuerteRequest{Id: jugador_struct.id})
+	if err != nil {
+		panic("No pudimos chequear si esta inciado  " + err.Error())
+	}
+	
+	jugador_struct.alive = resMuerte.GetAlive()
+	if !jugador_struct.alive {
+		log.Fatalln("Oh no! te han matado al final del juego 2")
+	}
+
+
 
 	// Luego de revisar si estoy vivo, comienza el juego 3
+
+
+	// ==============================================================================
+	// 									Inicio Juego 3
+	// ==============================================================================
+
+	fmt.Println("--------------------------------")
+	fmt.Println("       Inicio del juego 3       ")
+	fmt.Println("--------------------------------")
+	fmt.Println("")
 
 	// Generar un numero random entre 1 y 10
 	if jugador {
@@ -319,4 +350,14 @@ func main() {
 	}
 
 	// Revisar si estoy vivo!
+	resMuerte, err = serviceClient.Muerte(context.Background(), &pb.MuerteRequest{Id: jugador_struct.id})
+	if err != nil {
+		panic("No pudimos chequear si haz muerto... probablemente si!  " + err.Error())
+	}
+	
+	jugador_struct.alive = resMuerte.GetAlive()
+	if !jugador_struct.alive {
+		log.Fatalln("Oh no! te han matado al final del juego 3")
+	}
+
 }	

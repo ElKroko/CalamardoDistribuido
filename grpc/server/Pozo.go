@@ -40,6 +40,23 @@ func ActualAmmount() string {
 }
 
 func main() {
+
+    go func() {
+		listner, err := net.Listen("tcp", ":8083")
+		//conn, err := grpc.Dial("10.6.43.41:8080", grpc.WithInsecure())
+
+		if err != nil {
+			panic("cannot connect with server " + err.Error())
+		}
+
+		serv := grpc.NewServer()
+		pb.RegisterSquidGameServiceServer(serv, &server{})
+		if err = serv.Serve(listner); err != nil {
+			panic("cannot initialize the server" + err.Error())
+
+		}
+	}()
+
     f, err := os.Create("JugadoresEliminados.txt")
     if err != nil {
         log.Fatal(err)
