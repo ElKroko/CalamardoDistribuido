@@ -4,15 +4,15 @@ lider:
 
 namenode:
 	echo "Ejecutando namenode"
-	go run SquidGame/client/pozo.go
+	go run server/NameNode.go
 
 pozo:
 	echo "Ejecutando pozo"
-	go run SquidGame/client/pozo.go
+	go run server/Pozo.go
 
 datanode:
 	echo "Ejecutando datanode"
-	go run SquidGame/server/dataNode.go
+	go run server/DataNode.go
 	
 jugador:
 	echo "Ejecutando jugadores"
