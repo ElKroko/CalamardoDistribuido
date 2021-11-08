@@ -3,6 +3,10 @@ package main
 import (
   "log"
   amqp "github.com/streadway/amqp"
+  "net"
+  "grpc"
+  "pb"
+  "server"
 )
 
 func failOnError(err error, msg string) {
@@ -12,18 +16,28 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
+	go func() {
+		listner, err := net.Listen("tcp", ":8083")
+
+		if err != nil {
+			panic("cannot create tcp connection " + err.Error())
+		}
+
+		serv := grpc.NewServer()
+		pb.RegisterCalamardoGameServer(serv, &server{})
+		if err = serv.Serve(listner); err != nil {
+			panic("cannot initialize the server" + err.Error())
+		}
+	}()
 
 	conn, err := amqp.Dial("amqp://test:test@10.6.43.110:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
-	log.Printf("¿?")
 	defer conn.Close()
 
-	log.Printf("Conecto")
 
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
-	log.Printf("Conecto channel")
 
 	q, err := ch.QueueDeclare(
 		"hello", // name
@@ -34,7 +48,6 @@ func main() {
 		nil,     // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-	log.Printf("Declaro Qeue")
 
 	i := "1"
 	s := "2"
