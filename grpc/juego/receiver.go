@@ -3,6 +3,10 @@ package main
 import (
   "log"
   amqp "github.com/streadway/amqp"
+  "net"
+  "grpc"
+  "pb"
+  "server"
 )
 
 func failOnError(err error, msg string) {
