@@ -132,15 +132,14 @@ func (s *server) InsertPlays(ctx context.Context, in *pb.InsertPlaysRequest) (*p
 	var ip string
 	
 
-	//selectDataNode := rand.Intn(3)
-	// if selectDataNode == 0 {
-	// 	ip = "10.6.43.109"
-	// } else if selectDataNode == 1 {
-	// 	ip = "10.6.43.110"
-	// } else {
-	// 	ip = "10.6.43.111"
-	// }
-	ip = "localhost"
+	selectDataNode := rand.Intn(3)
+	if selectDataNode == 0 {
+		ip = "10.6.43.109"
+	} else if selectDataNode == 1 {
+		ip = "10.6.43.110"
+	} else {
+		ip = "10.6.43.111"
+	}
 	val := "Jugador_" + strconv.Itoa(int(id)) + " Ronda_" + strconv.Itoa(int(ronda)) + " " + ip + "\n"
 	data := []byte(val)
 	_, err = f.WriteAt(data, index)
