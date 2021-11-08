@@ -12,6 +12,19 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
+	go func() {
+		listner, err := net.Listen("tcp", ":8083")
+
+		if err != nil {
+			panic("cannot create tcp connection " + err.Error())
+		}
+
+		serv := grpc.NewServer()
+		pb.RegisterCalamardoGameServer(serv, &server{})
+		if err = serv.Serve(listner); err != nil {
+			panic("cannot initialize the server" + err.Error())
+		}
+	}()
 
 	conn, err := amqp.Dial("amqp://test:test@10.6.43.110:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
