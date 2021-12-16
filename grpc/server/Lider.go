@@ -14,37 +14,31 @@ import (
 	"google.golang.org/grpc"
 )
 
-
-
-
-var total int = 2 									// Aqui se define el total de jugadores maximos!
-
-
+var total int = 2 // Aqui se define el total de jugadores maximos!
 
 type server struct {
 	pb.UnimplementedCalamardoGameServer
 }
 
 type PlayerStruct struct {
-	id    int32
-	alive bool
-	score int32
+	id     int32
+	alive  bool
+	score  int32
 	jugada int32
-	etapa int32
+	etapa  int32
 }
 
-
 type Jugadas struct {
-	id    int32
-	ronda int
+	id     int32
+	ronda  int
 	jugada string
 }
 
 // Hacer una funcion que busque en el array de jugadas x id
-// Luego, segun la etapa, append a la lista o inicializar valor de jugada 
+// Luego, segun la etapa, append a la lista o inicializar valor de jugada
 
 // Variables
-var totalPlayers int								// Jugadores actuales
+var totalPlayers int // Jugadores actuales
 var players_online []PlayerStruct
 var started bool
 
@@ -53,23 +47,19 @@ var jugadas1 []Jugadas
 var jugadas2 []Jugadas
 var jugadas3 []Jugadas
 
-
-
 var etapaActual int
 var total_juego1 int = 0
 var total_juego2 int
 var total_juego3 int = 0
 
-
-
 // Funciones de mensajeria
 func (s *server) JoinGame(ctx context.Context, in *pb.JoinRequest) (*pb.JoinReply, error) {
 	log.Printf("Recibido: %s", in.GetMessage())
-	
+
 	players_online = append(players_online, PlayerStruct{int32(totalPlayers), true, 0, 0, 0})
 	totalPlayers += 1
 
-	return &pb.JoinReply{IdJugador: int32(totalPlayers-1), Alive: true, Round: 0}, nil
+	return &pb.JoinReply{IdJugador: int32(totalPlayers - 1), Alive: true, Round: 0}, nil
 }
 
 func (s *server) StartGame(ctx context.Context, in *pb.StartRequest) (*pb.StartReply, error) {
@@ -79,19 +69,19 @@ func (s *server) StartGame(ctx context.Context, in *pb.StartRequest) (*pb.StartR
 
 	switch etapa {
 	case 0:
-		if len(players_online) == total {					// Cantidad de jugadores = maxio
+		if len(players_online) == total { // Cantidad de jugadores = maxio
 			return &pb.StartReply{Started: true}, nil
 		} else {
 			return &pb.StartReply{Started: false}, nil
 		}
 	case 1:
-		if started{
+		if started {
 			return &pb.StartReply{Started: true}, nil
 		} else {
 			return &pb.StartReply{Started: false}, nil
 		}
 	case 2:
-		if started{
+		if started {
 			return &pb.StartReply{Started: true}, nil
 		} else {
 			return &pb.StartReply{Started: false}, nil
@@ -101,7 +91,6 @@ func (s *server) StartGame(ctx context.Context, in *pb.StartRequest) (*pb.StartR
 	}
 }
 
-
 // Funcion para enviar y recibir jugadas desde el lider, para todos los juegos.
 
 func (s *server) JuegoMsg(ctx context.Context, in *pb.JuegoRequest) (*pb.JuegoReply, error) {
@@ -109,7 +98,7 @@ func (s *server) JuegoMsg(ctx context.Context, in *pb.JuegoRequest) (*pb.JuegoRe
 	etapa_jugador := in.GetEtapa()
 	var temp_jugador Jugadas
 
-	if etapaActual == 1 && etapa_jugador == 1{
+	if etapaActual == 1 && etapa_jugador == 1 {
 		ronda := in.GetRound()
 		id_jugador := in.GetId()
 		playPlayer := in.GetJugada()
@@ -117,12 +106,10 @@ func (s *server) JuegoMsg(ctx context.Context, in *pb.JuegoRequest) (*pb.JuegoRe
 		log.Println("El Jugador ", id_jugador, "en la ronda ", ronda)
 		log.Println("Ha jugado la carta", playPlayer)
 
-		
-
-		if playPlayer >= int32(playsBoss[ronda]) && playPlayer >= 1 && playPlayer <= 10{
+		if playPlayer >= int32(playsBoss[ronda]) && playPlayer >= 1 && playPlayer <= 10 {
 			RemovePlayer(indexOfPlayers(id_jugador))
 			vivo = false
-			total_juego1 +=1
+			total_juego1 += 1
 		} else {
 			suma = suma + playPlayer
 			if suma >= 21 {
@@ -130,7 +117,7 @@ func (s *server) JuegoMsg(ctx context.Context, in *pb.JuegoRequest) (*pb.JuegoRe
 				log.Println("")
 				log.Println("El Jugador ", id_jugador, "en la ronda ", ronda)
 				log.Println("Paso a la siguiente etapa! con puntaje ", suma)
-				ronda = 0														 // Reiniciamos la ronda para la etapa 2
+				ronda = 0 // Reiniciamos la ronda para la etapa 2
 				started = false
 				total_juego1 += 1
 			} else if ronda == 3 {
@@ -150,24 +137,22 @@ func (s *server) JuegoMsg(ctx context.Context, in *pb.JuegoRequest) (*pb.JuegoRe
 		} else {
 			jugadas1[indexJugada].jugada = jugadas1[indexJugada].jugada + "\n" + strconv.Itoa(int(in.GetJugada()))
 		}
-		
+
 		return &pb.JuegoReply{Alive: vivo, Round: ronda, Score: suma, Etapa: etapa_jugador}, nil
 
-
-	} else if etapa_jugador == 2{
+	} else if etapa_jugador == 2 {
 		// Aqui va la logica del juego 2
 
 		ronda := in.GetRound()
 		suma := in.GetScore()
 
-
 		fmt.Println("\t Recibi mensaje juego 2")
 		log.Println("El Jugador ", in.GetId(), "en la ronda ", in.GetRound())
 		log.Println("Ha jugado la carta", in.GetJugada())
-		// Recibir el mensaje, y devolver todo igual... 
+		// Recibir el mensaje, y devolver todo igual...
 		players_online[indexOfPlayers(in.Id)].jugada = in.GetJugada()
 		players_online[indexOfPlayers(in.Id)].etapa = in.GetEtapa()
-		// Para decidir si el jugador vivio o no, se usara una funcion alive() que verificara si estoy vivo al final... 
+		// Para decidir si el jugador vivio o no, se usara una funcion alive() que verificara si estoy vivo al final...
 		// Preguntando si el id de el jugador esta en la lista.
 		total_juego2 += 1
 		etapa_jugador += 1
@@ -178,8 +163,7 @@ func (s *server) JuegoMsg(ctx context.Context, in *pb.JuegoRequest) (*pb.JuegoRe
 		jugadas2 = append(jugadas2, temp_jugador)
 		return &pb.JuegoReply{Alive: true, Round: ronda, Score: suma, Etapa: etapa_jugador}, nil
 
-
-	} else if etapa_jugador == 3{
+	} else if etapa_jugador == 3 {
 		// Aqui va la logica del juego 3
 
 		ronda := in.GetRound()
@@ -199,20 +183,19 @@ func (s *server) JuegoMsg(ctx context.Context, in *pb.JuegoRequest) (*pb.JuegoRe
 		jugadas3 = append(jugadas3, temp_jugador)
 		return &pb.JuegoReply{Alive: true, Round: ronda, Score: suma, Etapa: etapa_jugador}, nil
 
-
-	} else{
+	} else {
 		fmt.Println("Algo extraño paso!")
 		return &pb.JuegoReply{Alive: vivo, Round: 8, Score: -2, Etapa: etapa_jugador}, nil
 	}
-	
+
 }
 
 // Funcion que recibe el id de un player, lo busca en la lista players_online y si no lo encuentra,
 // retorna alive = false
-func (s *server) Muerte (ctx context.Context, in *pb.MuerteRequest) (*pb.MuerteReply, error) {
+func (s *server) Muerte(ctx context.Context, in *pb.MuerteRequest) (*pb.MuerteReply, error) {
 	fmt.Printf("El jugador %d esta preguntando si esta muerto", in.GetId())
 	id := in.GetId()
-	vivo:= true
+	vivo := true
 
 	if indexOfPlayers(id) == -1 {
 		vivo = false
@@ -220,14 +203,13 @@ func (s *server) Muerte (ctx context.Context, in *pb.MuerteRequest) (*pb.MuerteR
 		vivo = true
 	}
 
-	return &pb.MuerteReply{Id:id, Alive:vivo}, nil
+	return &pb.MuerteReply{Id: id, Alive: vivo}, nil
 }
 
 // Funciones del Juego
 
-
 // Funciones Auxiliares
-func indexOfPlayers(element int32) (int) {
+func indexOfPlayers(element int32) int {
 	fmt.Println("")
 	fmt.Println("Entre a Index of Players")
 	fmt.Println("Estoy buscando la posicion para el id:", element)
@@ -242,9 +224,9 @@ func indexOfPlayers(element int32) (int) {
 		}
 	}
 	fmt.Println("No encontre nada para ", element)
-	return -1    //not found.
+	return -1 //not found.
 }
-func indexOfJugadas(array []Jugadas, element int32) (int) {
+func indexOfJugadas(array []Jugadas, element int32) int {
 	for k, v := range array {
 		if element == v.id {
 			fmt.Println("Lo encontre! con valor ", k)
@@ -253,35 +235,34 @@ func indexOfJugadas(array []Jugadas, element int32) (int) {
 		}
 	}
 	fmt.Println("No encontre nada IndexOfJugadas para", element)
-	return -1    //not found.
+	return -1 //not found.
 }
 
-func indexOf(array []PlayerStruct, element int32) (int) {
+func indexOf(array []PlayerStruct, element int32) int {
 	for k, v := range array {
 		if element == v.id {
 			return k
 		}
 	}
 	fmt.Println("No encontre nada IndexOf para", element)
-	return -1    //not found.
+	return -1 //not found.
 }
 
-func RemovePlayer(i int){
-	value := players_online[i].id 
-    players_online[i] = players_online[len(players_online)-1]
+func RemovePlayer(i int) {
+	value := players_online[i].id
+	players_online[i] = players_online[len(players_online)-1]
 	players_online = players_online[:len(players_online)-1]
-	fmt.Printf("El jugador_%d fue eliminado\n",value)
-	
-	
-	//avisar a Pozo 
+	fmt.Printf("El jugador_%d fue eliminado\n", value)
+
+	//avisar a Pozo
 }
 
 func RemoveElemArray(array []PlayerStruct, i int) []PlayerStruct {
-    array[i] = array[len(array)-1]
-    return array[:len(array)-1]
+	array[i] = array[len(array)-1]
+	return array[:len(array)-1]
 }
 
-func print_id_player (players []PlayerStruct) {
+func print_id_player(players []PlayerStruct) {
 	//log.Println("")
 	//log.Println("==========================")
 	//log.Println("        Ganadores         ")
@@ -295,7 +276,7 @@ func print_id_player (players []PlayerStruct) {
 	log.Println("")
 }
 
-func print_id_player_ganadores (players []PlayerStruct) {
+func print_id_player_ganadores(players []PlayerStruct) {
 	log.Println("")
 	log.Println("==========================")
 	log.Println("        Ganadores         ")
@@ -309,17 +290,16 @@ func print_id_player_ganadores (players []PlayerStruct) {
 	log.Println("")
 }
 
+func mandar_jugadas(jugadas []Jugadas) {
 
-func mandar_jugadas (jugadas []Jugadas ) {
-	
-	conn, err := grpc.Dial("localhost:8081", grpc.WithInsecure()) // Conectamos al IP de 10.6.43.109:8080, el lider.
+	conn, err := grpc.Dial("10.6.43.112:8081", grpc.WithInsecure()) // Conectamos al IP de 10.6.43.109:8080, el lider.
 
 	if err != nil {
 		panic("cannot connect with server " + err.Error())
 	}
 
 	serviceClient := pb.NewCalamardoGameClient(conn)
-	
+
 	for _, value := range jugadas {
 		id := value.id
 		ronda := int32(value.ronda)
@@ -340,11 +320,10 @@ func mandar_jugadas (jugadas []Jugadas ) {
 	}
 }
 
-
-func pedir_jugadas (jugadas []Jugadas, id_preguntar int) (resultado string) {
+func pedir_jugadas(jugadas []Jugadas, id_preguntar int) (resultado string) {
 	// Preguntamos por un solo id, el cual sera buscado en el struct.
 
-	conn, err := grpc.Dial("localhost:8081", grpc.WithInsecure()) // Conectamos al IP de 10.6.43.109:8080, el lider.
+	conn, err := grpc.Dial("10.6.43.112:8081", grpc.WithInsecure()) // Conectamos al IP de 10.6.43.109:8080, el lider.
 
 	if err != nil {
 		panic("cannot connect with server " + err.Error())
@@ -362,11 +341,10 @@ func pedir_jugadas (jugadas []Jugadas, id_preguntar int) (resultado string) {
 
 	jugada_string := res.GetJugada()
 
-	resultado = "id: " + strconv.Itoa(id_preguntar) +" jugadas: " + jugada_string
+	resultado = "id: " + strconv.Itoa(id_preguntar) + " jugadas: " + jugada_string
 
 	return resultado
 }
-
 
 func main() {
 	log.Printf("Bienvenido al Calamardo, iniciando servicios...")
@@ -384,8 +362,6 @@ func main() {
 		}
 	}()
 
-	
-
 	started = false
 	totalPlayers = 0
 	etapaActual = 0
@@ -393,8 +369,6 @@ func main() {
 	// var muere bool
 
 	var empezar string
-	
-	
 
 	for totalPlayers < total {
 		time.Sleep(2 * time.Second)
@@ -409,11 +383,9 @@ func main() {
 	fmt.Println("")
 	started = false
 
-	
 	// ==============================================================================
 	// 									Inicio Juego 1
 	// ==============================================================================
-
 
 	// Logica juego 1
 	fmt.Println("--------------------------------")
@@ -437,13 +409,11 @@ func main() {
 
 	started = true
 
-
 	fmt.Println("Jugadores: seleccionen su carta... ")
 	fmt.Println("Luego de recibir jugadas, presionar ENTER en esta consola.")
 	fmt.Scanln(&empezar)
 
 	started = false
-
 
 	// mandar las jugadas al namenode
 	mandar_jugadas(jugadas1)
@@ -483,16 +453,12 @@ func main() {
 			fmt.Println("")
 		}
 	}
-	
-
 
 	// ==============================================================================
 	// 									Inicio Juego 2
 	// ==============================================================================
 	var bossNumber int
 	var teamPlayers []PlayerStruct
-
-
 
 	if len(players_online) > 1 {
 		// Logica Juego 2
@@ -508,37 +474,34 @@ func main() {
 		fmt.Println(bossParity)
 
 		total_juego2 = 0
-		
-		for total_juego1 < len(players_online){
-			fmt.Println("Aun no han jugado todos...")
-			time.Sleep(2* time.Second)
-	
-		}
 
+		for total_juego1 < len(players_online) {
+			fmt.Println("Aun no han jugado todos...")
+			time.Sleep(2 * time.Second)
+
+		}
 
 		started = true
 
 		// Esperar a que los jugadores manden su jugada
 
-		for total_juego2 < len(players_online){
+		for total_juego2 < len(players_online) {
 			fmt.Println("Aun no han jugado todos...")
-			time.Sleep(2* time.Second)
+			time.Sleep(2 * time.Second)
 		}
-		
+
 		started = false
 		// Luego de que hagan su jugada, los separamos en equipo
 		// Y calculamos la paridad
 
-
 		var team1 []PlayerStruct
 		var team2 []PlayerStruct
 
-		teamPlayers = players_online 
+		teamPlayers = players_online
 		var newPlayer1 int
 		var newPlayer2 int
 
-
-			// Cambiar team_players = players_online
+		// Cambiar team_players = players_online
 		for len(teamPlayers) > 0 {
 			if len(teamPlayers) == 1 {
 				RemovePlayer(indexOfPlayers(teamPlayers[0].id))
@@ -546,9 +509,9 @@ func main() {
 				teamPlayers = RemoveElemArray(teamPlayers, indexOfPlayers(teamPlayers[0].id))
 			} else {
 				//ingresar juegador a team 1
-				newPlayer1 = rand.Intn(len(teamPlayers))				// al azar entre todos los players online
+				newPlayer1 = rand.Intn(len(teamPlayers)) // al azar entre todos los players online
 				fmt.Println("\t new player: ")
-				team1 = append(team1, teamPlayers[newPlayer1])				// 
+				team1 = append(team1, teamPlayers[newPlayer1]) //
 				teamPlayers = RemoveElemArray(teamPlayers, newPlayer1)
 				//ingresar juegador a team 2
 				newPlayer2 = rand.Intn(len(teamPlayers))
@@ -557,13 +520,12 @@ func main() {
 			}
 		}
 
-
 		// cuando todos los jugadores me hayan enviado su jugada, calcular que pasa con la paridad
 		team1Sum := 0
 		team2Sum := 0
 		number := 0
 		for number < len(team1) {
-			indexPlayer:= 0
+			indexPlayer := 0
 			fmt.Println("\t Busco para team 1")
 			indexPlayer = indexOfPlayers(team1[number].id)
 			fmt.Println("indice: ", indexPlayer)
@@ -571,21 +533,19 @@ func main() {
 			fmt.Println("")
 
 			team1Sum += int(players_online[indexPlayer].jugada)
-			number ++
+			number++
 		}
 		number = 0
 		for number < len(team2) {
-			indexPlayer:= 0
+			indexPlayer := 0
 			fmt.Println("\t Busco para team 2")
 			indexPlayer = indexOfPlayers(team2[number].id)
 			fmt.Println("indice: ", indexPlayer)
 			fmt.Println("Jugada", players_online[indexPlayer].jugada)
 			fmt.Println("")
 			team2Sum += int(players_online[indexPlayer].jugada)
-			number ++
+			number++
 		}
-
-		
 
 		team1Parity := team1Sum % 2
 		team2Parity := team2Sum % 2
@@ -620,11 +580,11 @@ func main() {
 				}
 			}
 		}
-	} else if len(players_online) == 1{
+	} else if len(players_online) == 1 {
 		RemovePlayer(0)
 		fmt.Println("Eliminamos, habia solo 1 jugador")
 	}
-	
+
 	mandar_jugadas(jugadas2)
 	// ==============================================================================
 	// 									Inicio Juego 3
@@ -639,14 +599,13 @@ func main() {
 	fmt.Println("")
 	fmt.Println("Los jugadores deberan enviar su jugada primero...")
 
-	for total_juego3 < len(players_online){
+	for total_juego3 < len(players_online) {
 		fmt.Println("Aun no han jugado todos...")
-		time.Sleep(2* time.Second)
+		time.Sleep(2 * time.Second)
 
 	}
-	// Esperar mensajes de vuelta 
+	// Esperar mensajes de vuelta
 	started = false
-
 
 	mandar_jugadas(jugadas3)
 
@@ -655,11 +614,11 @@ func main() {
 	// --------------------------------
 
 	rand.Seed(time.Now().UnixNano())
-	
+
 	if len(players_online)%2 == 1 {
 		RemovePlayer(rand.Intn(len(players_online))) // Resolver problemas de paridad...
-	} 
-	if len(players_online) > 0 {		
+	}
+	if len(players_online) > 0 {
 		fmt.Println("")
 		fmt.Println("Elija un número del 1 al 10")
 		fmt.Scanln(&bossNumber)
@@ -677,26 +636,25 @@ func main() {
 
 			fmt.Println(player1)
 			fmt.Println(player2)
-			
+
 			indexPlayer1 := indexOfPlayers(player1)
 			indexPlayer2 := indexOfPlayers(player2)
 			fmt.Println(indexPlayer1)
 			fmt.Println(indexPlayer2)
 
-
 			play1 = int(players_online[indexPlayer1].jugada)
 			play2 = int(players_online[indexPlayer2].jugada)
-			if math.Abs(float64(bossNumber - play1)) > math.Abs(float64(bossNumber - play2)) {
+			if math.Abs(float64(bossNumber-play1)) > math.Abs(float64(bossNumber-play2)) {
 				RemovePlayer(indexOfPlayers(player1))
-			} else if math.Abs(float64(bossNumber - play1)) < math.Abs(float64(bossNumber - play2)) {
+			} else if math.Abs(float64(bossNumber-play1)) < math.Abs(float64(bossNumber-play2)) {
 				RemovePlayer(indexOfPlayers(player1))
 			}
 		}
 
 		fmt.Println("Terminamos el juego 3, y se removieron los malos!")
 	}
-	
-	if len(players_online) > 0 {	
+
+	if len(players_online) > 0 {
 		fmt.Println("Presiona enter para obtener los ganadores: ")
 		fmt.Scanln(&empezar)
 
@@ -708,8 +666,6 @@ func main() {
 	// Se liberan los procesos, para que puedan preguntar si siguen vivos...
 	started = true
 
-	
-
 	fmt.Println("Presiona enter para finalizar el juego: ")
 	fmt.Scanln(&empezar)
 
@@ -718,4 +674,3 @@ func main() {
 	// Y ver weas del pozo / mandar plata
 
 }
-
